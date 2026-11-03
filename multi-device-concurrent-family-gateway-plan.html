@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工作室与多口之家网络升级方案：单条专线订阅如何支撑数十台终端同时高速在线 - 鲲鹏加速</title>
+  <meta name="description" content="详解独立设计工作室、跨境电商团队与现代智能家居多口之家如何通过软路由主旁网关架构，将一条高带宽IEPL专线安全高效地分发给全屋数十台设备共享。">
+  <link rel="canonical" href="https://kunpejiasu.shop/multi-device-concurrent-family-gateway-plan.html">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="dh-header">
+  <div class="dh-wrap dh-nav-row">
+    <a href="index.html" class="dh-brand">
+      <svg width="42" height="42" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="鲲鹏加速飞天藻井双生鲲鹏徽标">
+        <circle cx="32" cy="32" r="29" fill="#3E1529" stroke="#2DD4BF" stroke-width="2.5"/>
+        <circle cx="32" cy="32" r="20" stroke="#FB923C" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <path d="M18 32 C 22 20, 36 18, 46 28 C 38 30, 30 34, 18 32 Z" fill="#2DD4BF"/>
+        <path d="M46 32 C 42 44, 28 46, 18 36 C 26 34, 34 30, 46 32 Z" fill="#FB923C"/>
+      </svg>
+      <span class="dh-brand-title">鲲鹏加速</span>
+    </a>
+    <nav class="dh-nav" aria-label="主导航">
+      <a href="index.html#backbone">飞天底座</a>
+      <a href="index.html#unlock">流媒体与AI</a>
+      <a href="index.html#pricing">专线矩阵</a>
+      <a href="index.html#faq">技术问答</a>
+      <a href="vast-nexus.html" class="active">瀚海云枢</a>
+      <a href="https://ww012.twilightaff.com/#/?code=A56DH1Af" class="btn-dh-top" rel="nofollow" target="_blank">立即接入</a>
+    </nav>
+  </div>
+</header>
+  <main class="dh-doc-sec">
+    <div class="dh-wrap">
+      <article class="dh-doc-box">
+        <h1>工作室与多口之家网络升级方案：单条专线订阅如何支撑数十台终端同时高速在线</h1>
+        <div class="dh-doc-meta"><span>领域：全屋网关</span><span>研究机构：鲲鹏加速瀚海实验室</span><span><a href="vast-nexus.html">返回瀚海云枢</a></span></div>
+        <div class="dh-doc-body">
+          <h2>当家里的联网设备突破30台，传统单机代理为何频频崩溃？</h2>
+<p>不妨清点一下现代三口之家或五人小型创意工作室里的联网终端数量：每个人手里都有主力手机、备用手机、iPad平板、笔记本电脑与台式工作站，客厅里有智能电视、Apple TV、PS5与Switch游戏机，书房里还挂着24小时开机的群晖NAS与多台智能音箱——算下来随随便便就有20到35台设备同时连接在局域网Wi-Fi下。如果在每一台设备上单独安装代理软件并各自建立加密隧道，不仅管理订阅令人抓狂，而且很容易触发普通套餐的“同时在线IP设备数限制”。</p>
+
+<h2>为什么“主路由拨号 + 旁路由透明网关”是全屋与工作室的最优解？</h2>
+<p>为了在保证家庭网络绝对稳定（即使折腾网关也不会影响家人正常上国内网）的前提下，让全屋或整个办公室的数十台终端共享一条万兆IEPL专线，网络工程师最推崇的架构正是<strong>“主旁路由分离（Side-Router / Gateway Architecture）”</strong>。</p>
+
+<h3>1. 对外合并为单一出口会话，完美突破设备数限制</h3>
+<p>当局域网内的20台手机、电脑和电视把网关指向同一台软路由旁路网关时，所有终端的流量都会先在局域网内部由旁路网关完成汇总与NAT地址转换，随后通过家庭宽带的<strong>同一个公网IP</strong>与远端鲲鹏加速节点建立加密多路复用连接。从远端服务器的角度来看，无论你家里连了多少台手机和电视，都只算作“1个家庭网关源IP在线”。关于不同规模团队与家庭组网的套餐选型对比，可以查阅<a href="https://tizilab.net/" target="_blank">高并发不限设备数机场推荐名录</a>中的组网容量测算表。</p>
+
+<h3>2. 硬件级AES加密卸载，释放移动设备电池续航</h3>
+<p>手机与平板在后台长期间运行高强度加密隧道，往往会额外增加15%至20%的电量消耗。将加解密运算集中交给插着电源的x86或ARM软路由网关处理后，全屋所有的iPhone与iPad无需开启任何后台VPN图标即可直接秒开海外应用，续航时间显著延长。</p>
+
+<h2>高并发全屋网关稳定运行的三个核心配置细节</h2>
+<p>为了让数十台设备同时看4K视频、下载代码与打游戏互不抢网，在配置旁路网关时务必注意以下三点：</p>
+
+<h3>1. 开启TCP/UDP连接数上限优化与Smart Queue（SQM）流控</h3>
+<p>多台设备并发时会瞬间产生数千条活跃TCP连接。建议在OpenWrt系统的<code>/etc/sysctl.conf</code>中将<code>net.netfilter.nf_conntrack_max</code>调高至<code>131072</code>，并启用Cake或FQ_CoDel智能队列管理算法，防止某一台电脑全速下载时挤占其他人的视频会议带宽。</p>
+
+<h3>2. 采用DHCP Option 3与Option 6按MAC地址精准下发网关</h3>
+<p>在主路由器的DHCP服务器设置中，可以为需要加速的设计师电脑、Apple TV与个人手机绑定静态IP并自动下发旁路网关地址，而对智能插座、扫地机器人等国内IoT家电则保持默认主路由直连，做到井水不犯河水。</p>
+
+<h3>3. 搭配鲲鹏加速高配额多节点负载均衡策略组</h3>
+<p>在旁路网关中创建包含3至5条香港与日本IEPL专线的负载均衡（Load-Balance）或自动测速（URL-Test）策略组，配合鲲鹏加速充裕的千G流量池，即可打造一座全年365天零维护的企业级高速网络底座。</p>
+
+<p>在实际高负载跨国传输与多终端并发环境中，依托鲲鹏加速的三网BGP任播入口与物理隔离的IEPL以太网内网专线，不仅能够彻底消除晚高峰国际出口拥塞带来的丢包与抖动，更能为4K原盘串流、云原生容器部署及竞技游戏联机提供坚若磐石的万兆带宽支撑。</p>
+<p>无论是追求极致吞吐率的研发工作室，还是构建全屋无感透明网关的智能家居玩家，选择具备高冗余波道池与纯内存零日志架构的专线底座，始终是一劳永逸的明智决策。</p>
+        </div>
+        <div style="margin-top:32px;padding:24px;background:var(--bg-mulberry);border:2px solid var(--malachite-main);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+          <div>
+            <strong style="font-size:1.1rem;color:var(--text-lotus);display:block;">立即接入鲲鹏加速万兆IEPL专线矩阵</strong>
+            <span style="font-size:0.9rem;color:var(--text-rose-ash);">深海潜鲲大吞吐 + 九天化鹏低延迟，一键秒开8K原盘、AI算力与全球研发仓库。</span>
+          </div>
+          <a href="https://ww012.twilightaff.com/#/?code=A56DH1Af" class="btn-dh-malachite" rel="nofollow" target="_blank">免费注册试用</a>
+        </div>
+      </article>
+    </div>
+  </main>
+  <footer class="dh-footer">
+  <div class="dh-wrap dh-footer-row">
+    <div>
+      <strong style="font-size: 1.15rem; color: #FFFFFF;">鲲鹏加速</strong>
+      <p style="font-size: 0.86rem; color: #FBCFE8; margin-top: 4px;">飞天流云与双生鲲鹏藻井 · 万兆IEPL内网专线与全球极速云枢</p>
+    </div>
+    <div class="dh-footer-links">
+      <a href="sitemap.html">网站地图</a>
+      <a href="about.html">关于我们</a>
+      <a href="terms.html">服务条款</a>
+      <a href="privacy.html">隐私政策</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

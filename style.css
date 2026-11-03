@@ -1,0 +1,444 @@
+/* kunpejiasu.shop - Deep Mulberry-Burgundy & Malachite-Turquoise Dunhuang Celestial Kunpeng */
+:root {
+  --bg-mulberry: #240B16;
+  --bg-wine-band: #311020;
+  --bg-plum-card: #3E1529;
+  --text-lotus: #FFF1F2;
+  --text-rose-ash: #FBCFE8;
+  --malachite-main: #2DD4BF;
+  --malachite-deep: #0D9488;
+  --copper-peach: #FB923C;
+  --border-copper: rgba(251, 146, 60, 0.32);
+  --shadow-wine: 0 22px 52px rgba(15, 3, 9, 0.55);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background-color: var(--bg-mulberry);
+  color: var(--text-lotus);
+  line-height: 1.76;
+}
+
+body {
+  background-color: var(--bg-mulberry);
+  background-image:
+    radial-gradient(circle at 85% 15%, rgba(45, 212, 191, 0.14) 0%, transparent 42%),
+    radial-gradient(circle at 15% 75%, rgba(251, 146, 60, 0.12) 0%, transparent 45%);
+  overflow-x: hidden;
+}
+
+a, a:visited {
+  color: var(--malachite-main);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--copper-peach);
+}
+
+.dh-wrap {
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Header */
+.dh-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(36, 11, 22, 0.95);
+  border-bottom: 2px solid var(--border-copper);
+  padding: 14px 0;
+}
+
+.dh-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.dh-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none !important;
+}
+
+.dh-brand-title {
+  font-size: 1.46rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #2DD4BF 0%, #FDBA74 60%, #FFF1F2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dh-nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.dh-nav a, .dh-nav a:visited {
+  color: var(--text-lotus);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.dh-nav a:hover, .dh-nav a.active {
+  background: rgba(45, 212, 191, 0.16);
+  color: var(--malachite-main);
+}
+
+.btn-dh-top, .btn-dh-top:visited {
+  background: linear-gradient(135deg, var(--malachite-main), var(--copper-peach));
+  color: #240B16 !important;
+  text-decoration: none !important;
+  padding: 9px 22px !important;
+  border-radius: 8px;
+  font-weight: 900;
+}
+
+/* Hero Section with Dunhuang Celestial Mandala & Orbital Twin Kunpeng */
+.dh-hero {
+  padding: 58px 0 74px;
+}
+
+.dh-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 44px;
+  align-items: center;
+}
+
+.dh-mural-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(45, 212, 191, 0.14);
+  border: 1px solid var(--malachite-main);
+  color: var(--malachite-main);
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+.dh-hero h1 {
+  font-size: 2.75rem;
+  line-height: 1.24;
+  color: var(--text-lotus);
+  margin-bottom: 18px;
+  font-weight: 900;
+}
+
+.dh-hero h1 span {
+  color: var(--malachite-main);
+}
+
+.dh-hero-p {
+  font-size: 1.06rem;
+  color: var(--text-rose-ash);
+  margin-bottom: 28px;
+}
+
+.dh-cta-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.btn-dh-malachite, .btn-dh-malachite:visited {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #2DD4BF 0%, #0D9488 100%);
+  color: #240B16 !important;
+  text-decoration: none !important;
+  padding: 15px 32px;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 900;
+  box-shadow: 0 14px 28px rgba(45, 212, 191, 0.25);
+  transition: transform 0.2s ease;
+}
+
+.btn-dh-malachite:hover {
+  transform: translateY(-3px);
+}
+
+.btn-dh-copper, .btn-dh-copper:visited {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-plum-card);
+  color: var(--copper-peach) !important;
+  text-decoration: none !important;
+  padding: 15px 26px;
+  border-radius: 10px;
+  font-size: 1.02rem;
+  font-weight: 800;
+  border: 2px solid var(--copper-peach);
+  transition: transform 0.2s ease;
+}
+
+.btn-dh-copper:hover {
+  background: rgba(251, 146, 60, 0.16);
+  transform: translateY(-3px);
+}
+
+.dh-mandala-stage {
+  background: radial-gradient(circle at center, #4A1930 0%, #2B0D1B 75%, #1D0711 100%);
+  border: 2px solid var(--copper-peach);
+  border-radius: 180px 180px 28px 28px;
+  padding: 24px;
+  box-shadow: var(--shadow-wine);
+  overflow: hidden;
+}
+
+.dh-mandala-stage svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@keyframes mandalaRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes yinYangKunpeng {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
+@keyframes silkFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.anim-mandala-wheel {
+  animation: mandalaRotate 28s linear infinite;
+  transform-origin: 270px 220px;
+}
+
+.anim-orbital-pair {
+  animation: yinYangKunpeng 18s linear infinite;
+  transform-origin: 270px 220px;
+}
+
+.anim-silk-ribbon {
+  animation: silkFloat 5s ease-in-out infinite;
+}
+
+/* Sections */
+.dh-sec {
+  padding: 74px 0;
+}
+
+.dh-sec.wine-band {
+  background: var(--bg-wine-band);
+  border-top: 1px solid var(--border-copper);
+  border-bottom: 1px solid var(--border-copper);
+}
+
+.dh-head {
+  text-align: center;
+  max-width: 740px;
+  margin: 0 auto 48px;
+}
+
+.dh-head h2 {
+  font-size: 2.1rem;
+  color: var(--text-lotus);
+  margin-bottom: 10px;
+}
+
+.dh-head p {
+  color: var(--text-rose-ash);
+}
+
+/* Cards */
+.dh-three-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.dh-two-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.dh-card {
+  background: var(--bg-plum-card);
+  border: 1px solid var(--border-copper);
+  border-top: 4px solid var(--malachite-main);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--shadow-wine);
+}
+
+.dh-card h3 {
+  font-size: 1.22rem;
+  color: var(--text-lotus);
+  margin-bottom: 10px;
+}
+
+.dh-card p {
+  color: var(--text-rose-ash);
+  font-size: 0.94rem;
+}
+
+.dh-price-card {
+  background: var(--bg-plum-card);
+  border: 2px solid var(--border-copper);
+  border-radius: 20px;
+  padding: 34px 26px;
+  box-shadow: var(--shadow-wine);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dh-price-card.featured {
+  border-color: var(--malachite-main);
+  background: linear-gradient(180deg, #4E1B33 0%, #381224 100%);
+}
+
+.dh-price-num {
+  font-size: 2.45rem;
+  font-weight: 900;
+  color: var(--malachite-main);
+  margin: 14px 0;
+}
+
+.dh-ul {
+  list-style: none;
+  margin: 16px 0 26px;
+}
+
+.dh-ul li {
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(251, 207, 232, 0.18);
+  font-size: 0.94rem;
+}
+
+/* Subpage */
+.dh-doc-sec {
+  padding: 52px 0 78px;
+}
+
+.dh-doc-box {
+  max-width: 890px;
+  margin: 0 auto;
+  background: var(--bg-plum-card);
+  border: 2px solid var(--border-copper);
+  border-radius: 22px;
+  padding: 44px;
+  box-shadow: var(--shadow-wine);
+}
+
+.dh-doc-box h1 {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.dh-doc-meta {
+  font-size: 0.88rem;
+  color: var(--text-rose-ash);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border-copper);
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.dh-doc-body h2 {
+  font-size: 1.38rem;
+  color: var(--malachite-main);
+  margin: 26px 0 12px;
+}
+
+.dh-doc-body h3 {
+  font-size: 1.14rem;
+  color: var(--copper-peach);
+  margin: 18px 0 8px;
+}
+
+.dh-doc-body p {
+  margin-bottom: 15px;
+}
+
+.dh-footer {
+  background: #18060E;
+  color: var(--text-rose-ash);
+  padding: 42px 0;
+  border-top: 3px solid var(--malachite-main);
+}
+
+.dh-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.dh-footer-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.dh-footer-links a, .dh-footer-links a:visited {
+  color: var(--malachite-main) !important;
+  text-decoration: none;
+}
+
+@media (max-width: 980px) {
+  .dh-hero-grid,
+  .dh-three-grid,
+  .dh-two-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dh-nav-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dh-nav {
+    display: flex !important;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .dh-hero h1 {
+    font-size: 2rem;
+  }
+  .dh-doc-box {
+    padding: 24px 18px;
+  }
+}
