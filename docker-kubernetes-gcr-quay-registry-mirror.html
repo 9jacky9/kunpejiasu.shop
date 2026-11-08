@@ -43,7 +43,7 @@
 <p>过去很多开发者习惯在<code>/etc/docker/daemon.json</code>里填入网上的公益镜像加速地址。但这种方式存在三大致命隐患：第一，公益镜像站往往因带宽成本高昂或合规原因随时关停；第二，许多缓存站为了节省空间，镜像版本严重滞后，导致拉取不到最新的安全补丁Tag；第三，对于<code>gcr.io</code>、<code>nvcr.io</code>（NVIDIA深度学习官方镜像库，单个CUDA镜像动辄15GB以上）等非Docker Hub官方仓库，普通镜像站根本不支持代理同步。</p>
 
 <h3>治本之道：为容器运行时底层直通IEPL高速专线</h3>
-<p>要想一劳永逸地打通全球所有容器仓库，最规范、最安全的工程方案是在宿主机或局域网网关层面，直接为容器运行时守护进程（Docker Daemon或Containerd）配置高吞吐IEPL专线通道。根据<a href="https://tizilab.net/" target="_blank">云原生与开发者专线加速测评站</a>的实测数据，通过千兆IEPL专线直连Docker Hub与NVIDIA NGC美西/东京CDN节点，拉取一个12GB的PyTorch官方镜像耗时仅需不到90秒。</p>
+<p>要想一劳永逸地打通全球所有容器仓库，最规范、最安全的工程方案是在宿主机或局域网网关层面，直接为容器运行时守护进程（Docker Daemon或Containerd）配置高吞吐IEPL专线通道。根据云原生与开发者专线加速测评站的实测数据，通过千兆IEPL专线直连Docker Hub与NVIDIA NGC美西/东京CDN节点，拉取一个12GB的PyTorch官方镜像耗时仅需不到90秒。</p>
 
 <h2>Docker与Containerd守护进程专线配置实战</h2>
 <p>请注意：在终端里直接输入<code>export https_proxy=...</code>对<code>docker pull</code>是无效的，因为真正发起网络请求的是后台由systemd管理的守护进程。</p>
