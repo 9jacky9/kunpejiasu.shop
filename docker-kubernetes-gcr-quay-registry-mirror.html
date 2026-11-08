@@ -40,10 +40,10 @@
 <p>在现代云原生微服务与AI大模型私有化部署工作流中，无论是使用<code>docker compose up -d</code>在本地启动一套开发环境，还是在生产测试环境的Kubernetes（K8s）集群中通过Helm Chart部署一套Prometheus监控栈或vLLM推理引擎，第一步永远是从各大容器镜像仓库拉取基础镜像。然而，由于公开镜像站陆续失效，加上<code>docker.io</code>、<code>registry.k8s.io</code>、<code>gcr.io</code>、<code>ghcr.io</code>（GitHub容器库）与<code>quay.io</code>均位于海外，国内机器直接拉取时十有八九会卡在<code>Waiting</code>并最终抛出刺眼的<code>ErrImagePull</code>或<code>ImagePullBackOff</code>超时错误。</p>
 
 <h2>为什么第三方免费镜像站（Registry Mirror）不再可靠？</h2>
-<p>过去很多开发者习惯在<code>/etc/docker/daemon.json</code>里填入网上的公益镜像加速地址。但这种方式存在三大致命隐患：第一，公益镜像站往往因带宽成本高昂或合规原因随时关停；第二，许多缓存站为了节省空间，镜像版本严重滞后，导致拉取不到最新的安全补丁Tag；第三，对于<code>gcr.io</code>、<code>nvcr.io</code>（NVIDIA深度学习官方镜像库，单个CUDA镜像动辄15GB以上）等非Docker Hub官方仓库，普通镜像站根本不支持代理同步。</p>
+<p>过去很多开发者习惯在<code>/etc/docker/daemon.json</code>里填入网上的公益镜像加速地址。但这种方式存在三大致命隐患：第一，公益镜像站往往因带宽成本高昂或合规原因随时关停；第二，许多缓存站为了节省空间，镜像版本严重滞后，导致拉取不到最新的安全补丁Tag；第三，对于<code>gcr.io</code>、<code>nvcr.io</code>（NVIDIA深度学习镜像库，单个CUDA镜像动辄15GB以上）等非Docker Hub仓库，普通镜像站根本不支持代理同步。</p>
 
 <h3>治本之道：为容器运行时底层直通IEPL高速专线</h3>
-<p>要想一劳永逸地打通全球所有容器仓库，最规范、最安全的工程方案是在宿主机或局域网网关层面，直接为容器运行时守护进程（Docker Daemon或Containerd）配置高吞吐IEPL专线通道。根据云原生与开发者专线加速测评站的实测数据，通过千兆IEPL专线直连Docker Hub与NVIDIA NGC美西/东京CDN节点，拉取一个12GB的PyTorch官方镜像耗时仅需不到90秒。</p>
+<p>要想一劳永逸地打通全球所有容器仓库，最规范、最安全的工程方案是在宿主机或局域网网关层面，直接为容器运行时守护进程（Docker Daemon或Containerd）配置高吞吐IEPL专线通道。根据云原生与开发者专线加速测评站的实测数据，通过千兆IEPL专线直连Docker Hub与NVIDIA NGC美西/东京CDN节点，拉取一个12GB的PyTorch镜像耗时仅需不到90秒。</p>
 
 <h2>Docker与Containerd守护进程专线配置实战</h2>
 <p>请注意：在终端里直接输入<code>export https_proxy=...</code>对<code>docker pull</code>是无效的，因为真正发起网络请求的是后台由systemd管理的守护进程。</p>
@@ -53,7 +53,7 @@
 <p>创建文件<code>/etc/systemd/system/docker.service.d/http-proxy.conf</code>，在<code>[Service]</code>段落中配置<code>Environment="HTTP_PROXY=http://127.0.0.1:7890"</code>与<code>Environment="HTTPS_PROXY=http://127.0.0.1:7890"</code>，同時通过<code>NO_PROXY="localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.aliyuncs.com"</code>将内网私有Harbor仓库排除在代理之外。保存后执行<code>systemctl daemon-reload && systemctl restart docker</code>即可立即生效。</p>
 
 <h3>2. 配置 Containerd（适用于现代Kubernetes 1.24+集群节点）</h3>
-<p>对于直接使用<code>containerd</code>作为CRI运行时的K8s工作节点，只需同样在<code>/etc/systemd/system/containerd.service.d/http-proxy.conf</code>中注入上述环境变量并重启<code>containerd</code>服务。从此无论是拉取Kubernetes官方控制平面镜像，还是拉取HuggingFace与NVIDIA的大型AI容器，都能实现百兆满速秒下。</p>
+<p>对于直接使用<code>containerd</code>作为CRI运行时的K8s工作节点，只需同样在<code>/etc/systemd/system/containerd.service.d/http-proxy.conf</code>中注入上述环境变量并重启<code>containerd</code>服务。从此无论是拉取Kubernetes控制平面镜像，还是拉取HuggingFace与NVIDIA的大型AI容器，都能实现百兆满速秒下。</p>
 
 <p>在实际高负载跨国传输与多终端并发环境中，依托鲲鹏加速的三网BGP任播入口与物理隔离的IEPL以太网内网专线，不仅能够彻底消除晚高峰国际出口拥塞带来的丢包与抖动，更能为4K原盘串流、云原生容器部署及竞技游戏联机提供坚若磐石的万兆带宽支撑。</p>
 <p>无论是追求极致吞吐率的研发工作室，还是构建全屋无感透明网关的智能家居玩家，选择具备高冗余波道池与纯内存零日志架构的专线底座，始终是一劳永逸的明智决策。</p>
