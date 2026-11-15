@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>云原生集群部署提速实战：解决Kubernetes拉取海外容器镜像失败的根治方案 - 鲲鹏加速</title>
-  <meta name="description" content="针对国内服务器与本地开发机在部署Docker Compose及Kubernetes集群时频频遭遇ImagePullBackOff超时报错的问题，详解containerd/dockerd透明代理与IEPL专线加速实践。">
+  <title>Docker 拉取镜像太慢怎么办：镜像加速与代理设置的思路 - 鲲鹏加速</title>
+  <meta name="description" content="docker pull 速度慢或超时？介绍配置镜像加速地址、为 Docker 守护进程设置代理，以及在构建时使用代理的几种做法与注意事项。">
   <link rel="canonical" href="https://kunpejiasu.shop/docker-kubernetes-gcr-quay-registry-mirror.html">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -33,33 +33,21 @@
   <main class="dh-doc-sec">
     <div class="dh-wrap">
       <article class="dh-doc-box">
-        <h1>云原生集群部署提速实战：解决Kubernetes拉取海外容器镜像失败的根治方案</h1>
-        <div class="dh-doc-meta"><span>领域：云原生加速</span><span>研究机构：鲲鹏加速瀚海实验室</span><span><a href="vast-nexus.html">返回瀚海云枢</a></span></div>
+        <h1>Docker 拉取镜像太慢怎么办：镜像加速与代理设置的思路</h1>
+        <div class="dh-doc-meta"><span>领域：开发运维</span><span>编者：鲲鹏加速使用手记</span><span><a href="vast-nexus.html">返回瀚海云枢</a></span></div>
         <div class="dh-doc-body">
-          <h2>令无数运维与后端工程师头疼的“ImagePullBackOff”报错</h2>
-<p>在现代云原生微服务与AI大模型私有化部署工作流中，无论是使用<code>docker compose up -d</code>在本地启动一套开发环境，还是在生产测试环境的Kubernetes（K8s）集群中通过Helm Chart部署一套Prometheus监控栈或vLLM推理引擎，第一步永远是从各大容器镜像仓库拉取基础镜像。然而，由于公开镜像站陆续失效，加上<code>docker.io</code>、<code>registry.k8s.io</code>、<code>gcr.io</code>、<code>ghcr.io</code>（GitHub容器库）与<code>quay.io</code>均位于海外，国内机器直接拉取时十有八九会卡在<code>Waiting</code>并最终抛出刺眼的<code>ErrImagePull</code>或<code>ImagePullBackOff</code>超时错误。</p>
-
-<h2>为什么第三方免费镜像站（Registry Mirror）不再可靠？</h2>
-<p>过去很多开发者习惯在<code>/etc/docker/daemon.json</code>里填入网上的公益镜像加速地址。但这种方式存在三大致命隐患：第一，公益镜像站往往因带宽成本高昂或合规原因随时关停；第二，许多缓存站为了节省空间，镜像版本严重滞后，导致拉取不到最新的安全补丁Tag；第三，对于<code>gcr.io</code>、<code>nvcr.io</code>（NVIDIA深度学习镜像库，单个CUDA镜像动辄15GB以上）等非Docker Hub仓库，普通镜像站根本不支持代理同步。</p>
-
-<h3>治本之道：为容器运行时底层直通IEPL高速专线</h3>
-<p>要想一劳永逸地打通全球所有容器仓库，最规范、最安全的工程方案是在宿主机或局域网网关层面，直接为容器运行时守护进程（Docker Daemon或Containerd）配置高吞吐IEPL专线通道。根据云原生与开发者专线加速测评站的实测数据，通过千兆IEPL专线直连Docker Hub与NVIDIA NGC美西/东京CDN节点，拉取一个12GB的PyTorch镜像耗时仅需不到90秒。</p>
-
-<h2>Docker与Containerd守护进程专线配置实战</h2>
-<p>请注意：在终端里直接输入<code>export https_proxy=...</code>对<code>docker pull</code>是无效的，因为真正发起网络请求的是后台由systemd管理的守护进程。</p>
-
-<h3>1. 配置 Docker Daemon（适用于Docker CE与Docker Desktop）</h3>
-<p>在Linux系统上，依次执行以下命令创建systemd环境配置目录并写入本地或旁路网关的鲲鹏加速端口：</p>
-<p>创建文件<code>/etc/systemd/system/docker.service.d/http-proxy.conf</code>，在<code>[Service]</code>段落中配置<code>Environment="HTTP_PROXY=http://127.0.0.1:7890"</code>与<code>Environment="HTTPS_PROXY=http://127.0.0.1:7890"</code>，同時通过<code>NO_PROXY="localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,.aliyuncs.com"</code>将内网私有Harbor仓库排除在代理之外。保存后执行<code>systemctl daemon-reload && systemctl restart docker</code>即可立即生效。</p>
-
-<h3>2. 配置 Containerd（适用于现代Kubernetes 1.24+集群节点）</h3>
-<p>对于直接使用<code>containerd</code>作为CRI运行时的K8s工作节点，只需同样在<code>/etc/systemd/system/containerd.service.d/http-proxy.conf</code>中注入上述环境变量并重启<code>containerd</code>服务。从此无论是拉取Kubernetes控制平面镜像，还是拉取HuggingFace与NVIDIA的大型AI容器，都能实现百兆满速秒下。</p>
-
-<p>在实际高负载跨国传输与多终端并发环境中，依托鲲鹏加速的三网BGP任播入口与物理隔离的IEPL以太网内网专线，不仅能够彻底消除晚高峰国际出口拥塞带来的丢包与抖动，更能为4K原盘串流、云原生容器部署及竞技游戏联机提供坚若磐石的万兆带宽支撑。</p>
-<p>无论是追求极致吞吐率的研发工作室，还是构建全屋无感透明网关的智能家居玩家，选择具备高冗余波道池与纯内存零日志架构的专线底座，始终是一劳永逸的明智决策。</p>
-<p>通过将底层专线的物理低延迟优势与客户端内核的TUN虚拟网卡、Fake-IP无污染解析以及智能策略组有机结合，每一台终端设备都能在全天候任意时段充分释放千兆光纤的真正潜能。</p>
-<p>此外，建议研发与运维团队在日常持续集成与自动化部署流水线中，定期监控跨国专线节点的往返延迟与连接池复用效率，借助鲲鹏加速全天候稳定的全球网络矩阵，让每一次代码构建与云端协同都快人一步。</p>
-<p>当底层传输不再成为制约创造力的瓶颈，无论是跨越太平洋的实时技术探讨，还是超大规模模型参数的秒级拉取，都将如金鹏展翅九天般顺畅自如。</p>
+<h2>一、先分清是什么问题</h2>
+<p>拉取极慢但能完成，多半是网络路径问题；直接超时或失败，则可能是源站不可达。判断清楚，再决定用哪种办法。</p>
+<h2>二、使用镜像加速地址</h2>
+<p>在 Docker 的守护进程配置里添加 registry-mirrors，让它优先从可用的镜像站拉取。镜像站的可用性会变化，需要定期检查。</p>
+<h2>三、给守护进程设置代理</h2>
+<p>在 systemd 的 docker 服务下添加 drop-in 配置，设置 HTTP_PROXY、HTTPS_PROXY 和 NO_PROXY，然后重新加载并重启服务。内网地址要放进 NO_PROXY。</p>
+<h2>四、构建过程中的代理</h2>
+<p>构建镜像时可以通过构建参数传入代理，但注意不要把代理地址写进最终镜像里，避免泄露。</p>
+<h2>五、其他仓库</h2>
+<p>gcr.io、quay.io 等仓库同样适用上述思路。Kubernetes 节点则需要在容器运行时（如 containerd）里单独配置。</p>
+<h2>小结</h2>
+<p>镜像加速和代理是互补的。先用镜像站解决常用镜像，再用代理兜底，能显著缩短拉取时间。</p>
         </div>
         <div style="margin-top:32px;padding:24px;background:var(--bg-mulberry);border:2px solid var(--malachite-main);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
           <div>
